@@ -170,7 +170,9 @@ class VariationalAutoencoderToyNoise(nn.Module):
         log_q_z = utils.merge_leading_dims(log_q_z, num_dims=2)
 
         # Compute log prob of latents under the prior.
-        inputs = utils.repeat_rows(inputs, num_reps=num_samples)
+        # --- SR: fix bug: reapeat_rows needs torch.tensor input, not list (as previous input) ---
+        # ---     also log_probs expects inputs to be a tuple of data and corresponding errors ---
+        inputs = (utils.repeat_rows(i, num_reps=num_samples) for i in inputs)   # modified into tuple
         log_p_z = self._prior.log_prob(inputs, context=latents)
 
         # Compute log prob of inputs under the decoder,

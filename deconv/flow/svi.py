@@ -232,7 +232,9 @@ class SVIFlow(MAFlow):
         log_p_z = self.model._prior.log_prob(samples)
 
         # Compute log prob of inputs under the decoder,
-        x = utils.repeat_rows(x, num_reps=num_samples)
+        # --- SR: fix bug: reapeat_rows needs torch.tensor input, not list (as previous input) ---
+        # ---     also log_probs expects inputs to be a tuple of data and corresponding errors ---
+        x = (utils.repeat_rows(x_i, num_reps=num_samples) for x_i in x)   # modified into tuple
         log_p_x = self.model._likelihood.log_prob(x, context=samples)
 
         # Compute ELBO.
