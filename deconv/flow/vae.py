@@ -54,7 +54,9 @@ class VariationalAutoencoder(nn.Module):
         log_p_z = self._prior.log_prob(latents)
 
         # Compute log prob of inputs under the decoder,
-        inputs = utils.repeat_rows(inputs, num_reps=num_samples)
+        # --- SR: fix bug: reapeat_rows needs torch.tensor input, not list (as previous input) ---
+        # ---     also log_probs expects inputs to be a tuple of data and corresponding errors ---
+        inputs = (utils.repeat_rows(i, num_reps=num_samples) for i in inputs)   # modified into tuple
         log_p_x = self._likelihood.log_prob(inputs, context=latents)
 
         # Compute ELBO.

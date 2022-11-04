@@ -115,7 +115,11 @@ class SVIFlow(MAFlow):
 
                 optimiser.zero_grad()
 
-                torch.set_default_tensor_type(torch.cuda.FloatTensor)
+                # --- SR: check if cuda is available ---
+                if torch.cuda.is_available():
+                    torch.set_default_tensor_type(torch.cuda.FloatTensor)
+                else:
+                    torch.set_default_tensor_type(torch.FloatTensor)
                 
                 if self.use_iwae:
                     objective = self.model.log_prob_lower_bound(
@@ -165,12 +169,16 @@ class SVIFlow(MAFlow):
         with torch.no_grad():
             self.model.eval()
 
-            torch.set_default_tensor_type(torch.cuda.FloatTensor)
+            # --- SR: check if cuda is available ---
+            if torch.cuda.is_available():
+                torch.set_default_tensor_type(torch.cuda.FloatTensor)
+            else:
+                torch.set_default_tensor_type(torch.FloatTensor)
+
             if log_prob:
                 return self.model.log_prob_lower_bound(data, num_samples=num_samples)
             else:
                 return self.model.stochastic_elbo(data, num_samples=num_samples)
-            torch.set_default_tensor_type(torch.FloatTensor)
 
     def score_batch(self, dataset, log_prob=False, num_samples=None):
         loader = data_utils.DataLoader(
