@@ -20,7 +20,7 @@ class GMM(BaseGMM):
     def _e_step(self, data):
 
         try:
-            self.chol_covars = torch.cholesky(self.covars)
+            self.chol_covars = torch.linalg.cholesky(self.covars)
         except RuntimeError:
             return torch.tensor(float('-inf')), None
 

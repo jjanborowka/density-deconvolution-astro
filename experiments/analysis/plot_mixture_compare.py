@@ -144,7 +144,7 @@ svi = SVIFlow(
 
 test_point = [
     torch.Tensor(mean).to(svi.device),
-    torch.cholesky(torch.Tensor(cov)).to(svi.device)
+    torch.linalg.cholesky(torch.Tensor(cov)).to(svi.device)
 ]
 
 for i, k in enumerate(('1', '50_elbo', '50_iw')):

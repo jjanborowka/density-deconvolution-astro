@@ -41,8 +41,8 @@ ref_gmm, S, (z_train, x_train), (z_val, x_val), _ = generate_mixture_data()
 
 if args.gmm:
     if args.svi_gmm:
-        train_data = DeconvDataset(x_train.squeeze(), torch.cholesky(S.repeat(N, 1, 1)))
-        val_data = DeconvDataset(x_val.squeeze(), torch.cholesky(S.repeat(N_val, 1, 1)))
+        train_data = DeconvDataset(x_train.squeeze(), torch.linalg.cholesky(S.repeat(N, 1, 1)))
+        val_data = DeconvDataset(x_val.squeeze(), torch.linalg.cholesky(S.repeat(N_val, 1, 1)))
         if args.svi_exact_gmm:
             svi_gmm = SVIGMMExact(
                 2,
@@ -90,8 +90,8 @@ if args.gmm:
         gmm.fit(train_data, val_data=val_data, verbose=True)
         torch.save(gmm.module.state_dict(), args.output_prefix + '_params.pt')
 else:
-    train_data = DeconvDataset(x_train.squeeze(), torch.cholesky(S.repeat(N, 1, 1)))
-    val_data = DeconvDataset(x_val.squeeze(), torch.cholesky(S.repeat(N_val, 1, 1)))
+    train_data = DeconvDataset(x_train.squeeze(), torch.linalg.cholesky(S.repeat(N, 1, 1)))
+    val_data = DeconvDataset(x_val.squeeze(), torch.linalg.cholesky(S.repeat(N_val, 1, 1)))
     svi = SVIFlow(
         2,
         5,

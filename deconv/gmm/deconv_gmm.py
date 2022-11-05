@@ -42,7 +42,7 @@ class DeconvGMM(BaseGMM):
 
         T = self.covars[None, :, :, :] + noise_covars[:, None, :, :]
         try:
-            T_chol = torch.cholesky(T)
+            T_chol = torch.linalg.cholesky(T)
         except RuntimeError:
             return torch.tensor(float('-inf')), None
         T_inv = torch.cholesky_solve(

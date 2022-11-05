@@ -26,8 +26,8 @@ N_val = int(0.25 * N)
 
 ref_gmm, S, (z_train, x_train), (z_val, x_val), _ = generate_mixture_data()
 
-train_data = DeconvDataset(x_train.squeeze(), torch.cholesky(S.repeat(N, 1, 1)))
-val_data = DeconvDataset(x_val.squeeze(), torch.cholesky(S.repeat(N, 1, 1)))
+train_data = DeconvDataset(x_train.squeeze(), torch.linalg.cholesky(S.repeat(N, 1, 1)))
+val_data = DeconvDataset(x_val.squeeze(), torch.linalg.cholesky(S.repeat(N, 1, 1)))
 
 svi = SVIFlow(
     2,

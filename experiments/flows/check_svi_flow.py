@@ -147,7 +147,7 @@ if plot:
 
     target = (
         torch.Tensor([[4.0, 0.0]]),
-        torch.cholesky(torch.Tensor([[
+        torch.linalg.cholesky(torch.Tensor([[
             [0.1, 0],
             [0, 2]
         ]]))

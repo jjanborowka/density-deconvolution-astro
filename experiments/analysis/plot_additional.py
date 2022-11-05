@@ -117,7 +117,7 @@ cov = np.array([
 ])
 test_point = [
     torch.Tensor(mean).to(svi.device),
-    torch.cholesky(torch.Tensor(cov)).to(svi.device)
+    torch.linalg.cholesky(torch.Tensor(cov)).to(svi.device)
 ]
 test_point_gmm = [
     torch.Tensor(mean).to(svi.device),

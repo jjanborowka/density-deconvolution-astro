@@ -61,7 +61,7 @@ svi_gmm = SVIGMMExact(
 
 results = []
 
-test_data = DeconvDataset(x_test.squeeze(), torch.cholesky(S.repeat(N, 1, 1)))
+test_data = DeconvDataset(x_test.squeeze(), torch.linalg.cholesky(S.repeat(N, 1, 1)))
 test_data_gmm = DeconvDataset(x_test.squeeze(), S.repeat(N, 1, 1))
 
 torch.set_default_tensor_type(torch.cuda.FloatTensor)

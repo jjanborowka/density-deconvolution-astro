@@ -77,7 +77,7 @@ class SGDDeconvGMM(BaseSGDGMM):
         ).log_prob(x[0][:, None, :])
         p_weights = w - torch.logsumexp(w, axis=1)[:, None]
         
-        L_t = torch.cholesky(T)
+        L_t = torch.linalg.cholesky(T)
         T_inv = torch.cholesky_solve(torch.eye(self.d, device=self.device), L_t)
         
         diff = x[0][:, None, :] - self.module.means

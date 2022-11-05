@@ -305,7 +305,7 @@ class SVIFlow(MAFlow):
 
                 step = i * batches + j
 
-                # d[1] = torch.cholesky(d[1])
+                # d[1] = torch.linalg.cholesky(d[1])
 
                 torch.set_default_tensor_type('torch.cuda.FloatTensor')
                 elbo = self.model.log_prob_lower_bound(
@@ -338,7 +338,7 @@ class SVIFlow(MAFlow):
     def score(self, data, log_prob=False):
         with torch.no_grad():
             self.model.eval()
-            # data[1] = torch.cholesky(data[1])
+            # data[1] = torch.linalg.cholesky(data[1])
             torch.set_default_tensor_type(torch.cuda.FloatTensor)
             if log_prob:
                 return self.model.log_prob_lower_bound(data, num_samples=100)
