@@ -1,6 +1,5 @@
 import torch
 
-
     
 def minibatch_sample(sample_f, num_samples, dimensions, batch_size, device=torch.device('cpu'), context=None, x=None):
     

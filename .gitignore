@@ -109,3 +109,9 @@ output/
 
 *.pdf
 *.pkl
+
+# IDE stuff
+.idea
+
+# Notebooks
+notebooks/
