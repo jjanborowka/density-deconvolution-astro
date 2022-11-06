@@ -114,4 +114,4 @@ output/
 .idea
 
 # Notebooks
-notebooks/
+/notebooks/
