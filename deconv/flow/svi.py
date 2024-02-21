@@ -32,6 +32,7 @@ class SVIFlow(MAFlow):
 
         self.model = VariationalAutoencoder(
             prior=self._create_prior(),
+            # q 
             approximate_posterior=self._create_approximate_posterior(),
             likelihood=self._create_likelihood(),
             inputs_encoder=self._create_input_encoder()
@@ -39,6 +40,7 @@ class SVIFlow(MAFlow):
 
         self.model.to(self.device)
 
+    # p 
     def _create_prior(self):
         self.transform = self._create_transform(context_features=None, hidden_features=self.hidden_features)
         distribution = StandardNormal((self.dimensions,))
@@ -58,7 +60,7 @@ class SVIFlow(MAFlow):
         distribution = StandardNormal((self.dimensions,))
 
         posterior_transform = self._create_transform(self.context_size, hidden_features=self.hidden_features)
-
+       ## HERE 
         return flows.Flow(
             transforms.InverseTransform(
                 posterior_transform
@@ -86,6 +88,7 @@ class SVIFlow(MAFlow):
             lr=self.lr
         )
 
+        # OR MAYBE HERE 
         loader = data_utils.DataLoader(
             data,
             batch_size=self.batch_size,

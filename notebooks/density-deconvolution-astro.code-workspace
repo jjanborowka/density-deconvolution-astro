@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "density-deconvolution-astro",
+			"path": ".."
+		},
+		{
+			"name": "rs-data-science-wise-202324",
+			"path": "../../Downloads/rs-data-science-wise-202324"
+		}
+	],
+	"settings": {}
+}

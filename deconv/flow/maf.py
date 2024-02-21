@@ -25,7 +25,10 @@ class MAFlow(BaseFlow):
 
             transforms.CompositeTransform([
                 self._create_linear_transform(),
-                self._create_maf_transform(context_features, hidden_features)
+                self._create_maf_transform(context_features, hidden_features),
+                # Stochastic layer (permutation)
+                
+                
             ]) for i in range(self.flow_steps)
         ] + [
             self._create_linear_transform()
