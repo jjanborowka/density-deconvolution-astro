@@ -44,10 +44,7 @@ class SVIFlow(MAFlow):
     def _create_prior(self):
         self.transform = self._create_transform(context_features=None, hidden_features=self.hidden_features)
         distribution = StandardNormal((self.dimensions,))
-        return flows.Flow(
-            self.transform,
-            distribution
-        )
+        return Flow_encapsulator(self.dimensions,context=None,hidden_feature=256)
 
     def _create_likelihood(self):
         return DeconvGaussian()
@@ -61,12 +58,8 @@ class SVIFlow(MAFlow):
 
         posterior_transform = self._create_transform(self.context_size, hidden_features=self.hidden_features)
        ## HERE 
-        return flows.Flow(
-            transforms.InverseTransform(
-                posterior_transform
-            ),
-            distribution
-        )
+        return Flow_encapsulator(self.dimensions,context=self.context_size,hidden_feature=256)
+
 
     def _kl_factor(self, step, max_steps):
 
@@ -147,7 +140,7 @@ class SVIFlow(MAFlow):
                 optimiser.step()
                 
             train_loss /= len(data)
-            
+            print(train_loss)
             if val_data:
                 val_loss = self.score_batch(
                     val_data,
@@ -268,3 +261,40 @@ class SVIFlow(MAFlow):
                 context=context,
                 x=x
             )
+import zuko
+class Flow_encapsulator(): 
+    def __init__(self, dimensions,context,hidden_feature):
+        self.dimensions = dimensions
+        self.context = context
+        self.hidden_feature = hidden_feature
+        self.flow = zuko.flows.NSF(
+            features=dimensions,
+            context=context,    
+            transforms=3,
+            hidden_features=(hidden_feature, hidden_feature),
+        )
+
+    def _log_prob(self,inputs,context):
+        if context is None : 
+            return self.flow().log_prob() 
+
+        return self.flow(context).log_prob(inputs)
+    
+    def _sample(self,num_samples,context): 
+        if context is None: 
+            return self.flow().sample((num_samples,))
+        instance = self.flow(context)
+        return instance.sample((num_samples,))
+    def sample_and_log_prob(self,inputs,context):
+
+        if context: 
+            sample = self.flow().sample((inputs.shape[0],))
+            prob = self.flow().log_prob(sample)
+            return sample,prob
+        
+        instance = self.flow(context)
+        sample = instance.rsample()
+        prob = instance.log_prob(sample)
+        return sample, prob
+
+
